@@ -23,6 +23,8 @@ class Request(models.Model):
     completed = models.BooleanField(default=False)
     date_created = models.DateField(auto_now=True)   
     time_created = models.TimeField(auto_now=True)
+    latitude = models.DecimalField(max_digits=22, decimal_places=16, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=22, decimal_places=16, null=True, blank=True)
 
     def __str__(self):
         return str(self.customer.user.first_name) + ' [ ' + str(self.medName.name) + ',' + str(self.medQnty) + ' ]'

@@ -20,10 +20,10 @@ class MedNameSerializer(serializers.ModelSerializer):
         model = MedList
         fields = ['name']
 
-class RequestSerializer(serializers.ModelSerializer):
-    #customer = CustomerSerializer()
+class RequestSerializer(serializers.ModelSerializer): ### Update this to give email and phone number only if not used any where else
+    customer = CustomerSerializer()
     medName = MedNameSerializer()
     class Meta:
         model = Request
-        fields = ['id', 'medQnty', 'medName', 'completed', 'date_created', 'time_created']
+        fields = ['id', 'medQnty', 'medName', 'completed', 'date_created', 'time_created', 'customer']
 

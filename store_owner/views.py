@@ -29,13 +29,13 @@ def RegisterStores(request):
     else:
         return Response('this email already exists')
 
-'''@api_view(['GET'])
-def OwnerList(request):
-    owners = ShopOwner.objects.all()
-    print(owners)
-    serializer = ShopOwnerSerializer(owners, many=True)
+@api_view(['GET'])
+def RequestList(request):
+    requests = Request.objects.filter(completed=False).order_by('-time_created')
+    print(requests)
+    serializer = RequestSerializer(requests, many=True)
     return Response(serializer.data)
-'''
+
 @api_view(['GET'])
 def ItemDetail(request, pk):
     item = Request.objects.get(id=pk)
@@ -44,23 +44,26 @@ def ItemDetail(request, pk):
 
 @api_view(['POST'])
 def UpdateStock(request):
-    medName = request.data['medName']
-    ownerId = int(request.data['owner'])
-    medQnty = int(request.data['medQnty'])
-    try:
-        owner = ShopOwner.objects.get(id=ownerId)
-        medId = MedList.objects.get(name=medName)
-        stock = Stock.objects.get(storeOwner=owner, medName=medId)
-        stock.medQnty += medQnty
-        stock.save()
-        print('Successfully updated')
-    except (MedList.DoesNotExist, Stock.DoesNotExist):
+    print(request.data)
+    owneremail = request.data['owner']
+    owner = ShopOwner.objects.get(user__email=owneremail)
+    for order in request.data['meds']:
+        print(order)
+        medName = order['name']
+        medQnty = int(order['qnty'])
         try:
-            medId = MedList.objects.create(name=medName)
-        except IntegrityError:    
             medId = MedList.objects.get(name=medName)
-        Stock.objects.create(storeOwner=owner, medQnty=medQnty, medName=medId)
-        print("Successfully Created")
+            stock = Stock.objects.get(storeOwner=owner, medName=medId)
+            stock.medQnty += medQnty
+            stock.save()
+            print('Successfully updated')
+        except (MedList.DoesNotExist, Stock.DoesNotExist):
+            try:
+                medId = MedList.objects.create(name=medName)
+            except IntegrityError:    
+                medId = MedList.objects.get(name=medName)
+            Stock.objects.create(storeOwner=owner, medQnty=medQnty, medName=medId)
+            print("Successfully Created")
 
 
     return Response("request received")
