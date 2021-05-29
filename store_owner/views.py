@@ -25,7 +25,7 @@ def RegisterStores(request):
         user.set_password(password)
         user.save()
         ShopOwner.objects.create(user=user, phoneNum = phoneNum, latitude=latitude, longitude=longitude)
-        return Response('Successfully registered')
+        return Response('Successfully registered. Please Login')
     else:
         return Response('this email already exists')
 
@@ -67,3 +67,10 @@ def UpdateStock(request):
 
 
     return Response("request received")
+
+@api_view(['GET'])
+def CompleteReq(request, pk):
+    item = Request.objects.get(id=pk)
+    item.completed = True
+    item.save()
+    return Response('Request successfully completed')
