@@ -3,7 +3,7 @@ from store_owner.models import Stock
 from django.shortcuts import render
 from .models import *
 from store_owner.serializers import ShopOwnerSerializer
-from .serializers import RequestSerializer ,MedNameSerializer
+from .serializers import RequestSerializer ,MedNameSerializer, MedReqSerializer
 from meds.models import MedList
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -88,5 +88,5 @@ def SearchMeds(request):
 @api_view(['GET'])
 def GetMedList(request):
     medicines = MedList.objects.all()
-    serializer = MedNameSerializer(medicines, many=True)
+    serializer = MedReqSerializer(medicines, many=True)
     return Response(serializer.data)

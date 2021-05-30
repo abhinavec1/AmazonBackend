@@ -27,3 +27,9 @@ class RequestSerializer(serializers.ModelSerializer): ### Update this to give em
         model = Request
         fields = ['id', 'medQnty', 'medName', 'completed', 'date_created', 'time_created', 'customer']
 
+class MedReqSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedList
+        fields = '__all__'
+        
+
