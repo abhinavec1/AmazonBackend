@@ -66,7 +66,28 @@ def UpdateStock(request):
             print("Successfully Created")
 
 
-    return Response("request received")
+    return Response("Stock successfully updated")
+
+
+@api_view(['POST'])
+def OfflineReq(request):
+    print(request.data)
+    owneremail = request.data['owner']
+    owner = ShopOwner.objects.get(user__email=owneremail)
+    for order in request.data['meds']:
+        medName = order['name']
+        medQnty = int(order['qnty'])
+        try:
+            medId = MedList.objects.get(name=medName)
+            stock = Stock.objects.get(storeOwner=owner, medName=medId)
+            if stock.medQnty >= medQnty:
+                stock.medQnty -= medQnty
+                stock.save()
+                return Response("Stock successfully updated")
+            else:
+                return Response("The required medicine(s) not available in the desired quantity")
+        except (MedList.DoesNotExist, Stock.DoesNotExist):
+            return Response("The required medicine(s) not available in the desired quantity")
 
 @api_view(['GET'])
 def CompleteReq(request, pk):
