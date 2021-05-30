@@ -10,6 +10,7 @@ class ShopOwner(models.Model):
     phoneNum = PhoneNumberField()
     latitude = DecimalField(max_digits=22, decimal_places=16, null=True, blank=True)
     longitude = DecimalField(max_digits=22, decimal_places=16, null=True, blank=True)
+    rating = models.DecimalField(decimal_places=1, max_digits=2, default=0.0)
 
     def __str__(self):
         return self.user.first_name

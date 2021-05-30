@@ -6,5 +6,5 @@ class ShopOwnerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = ShopOwner
-        fields = ['user', 'phoneNum', 'latitude', 'longitude']
+        fields = ['user', 'phoneNum', 'latitude', 'longitude', 'rating']
 
